@@ -70,5 +70,5 @@ gradle bootRun
 ### Access the Application
 - Once the application is running, you can access it via:
 http://localhost:8086
-- For API documentation and testing, visit: http://localhost:8086/swagger-ui/
+- For API documentation and testing, visit: http://localhost:8086/swagger-ui/index.html
 
