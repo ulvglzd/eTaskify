@@ -31,8 +31,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImpl userDetailsService;
     private final ObjectMapper objectMapper;
 
-    // Constructor...
-
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,

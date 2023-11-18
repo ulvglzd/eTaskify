@@ -15,6 +15,7 @@ import com.etaskify.etaskifybackend.service.UserService;
 import com.etaskify.etaskifybackend.service.auth.AuthService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +26,14 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
     private final AuthService authService;
+    private final MailSendingService mailSendingService;
 
     @Override
     public void createTask(TaskRequest request) {
@@ -46,6 +49,8 @@ public class TaskServiceImpl implements TaskService {
                 throw new AccessDeniedException("You are not allowed to assign this user");
             }
             assignedUsers.add(user);
+            mailSendingService.sendMail(user.getEmail(), "New task",
+                    "You have been assigned to a new task, visit your dashboard to see more details");
         }
 
         Task task = Task.builder()
@@ -58,7 +63,7 @@ public class TaskServiceImpl implements TaskService {
                 .build();
 
         taskRepository.save(task);
-
+        log.info("Task created successfully");
 
     }
 
@@ -111,7 +116,6 @@ public class TaskServiceImpl implements TaskService {
                 .status(TaskStatus.valueOf(request.getStatus().toUpperCase()))
                 .organization(task.getOrganization())
                 .build();
-        System.out.println(task.getStatus());
         taskRepository.save(task);
     }
 

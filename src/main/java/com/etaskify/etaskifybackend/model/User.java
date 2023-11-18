@@ -1,6 +1,7 @@
 package com.etaskify.etaskifybackend.model;
 
 import com.etaskify.etaskifybackend.enums.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "Represents a user in the system")
 public class User {
 
     @Id

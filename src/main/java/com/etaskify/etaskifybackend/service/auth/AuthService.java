@@ -13,6 +13,7 @@ import com.etaskify.etaskifybackend.repository.OrganizationRepository;
 import com.etaskify.etaskifybackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -40,7 +42,7 @@ public class AuthService {
 
     @Transactional
     public AuthResponse signUp(SignUpRequest signUpRequest) {
-        //check if username or email name exists
+
         List<String> errors = new ArrayList<>();
 
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -76,6 +78,9 @@ public class AuthService {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
         String generatedToken = jwtService.generateToken(userDetails);
+        log.info("User registered successfully with email: {}", user.getEmail());
+
+
         return AuthResponse.builder()
                 .token(generatedToken)
                 .build();
@@ -89,11 +94,13 @@ public class AuthService {
 
             UserDetails user = userDetailsService.loadUserByUsername(request.getEmail());
             String generatedToken = jwtService.generateToken(user);
+            log.info("User signed in successfully with email: {}", user.getUsername());
 
             return AuthResponse.builder()
                     .token(generatedToken)
                     .message("Successfully signed in")
                     .build();
+
         } catch (AuthenticationException e) {
             throw new IncorrectCredentialsException("Incorrect username or password");
         }

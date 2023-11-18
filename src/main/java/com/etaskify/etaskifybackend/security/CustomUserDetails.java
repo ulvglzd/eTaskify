@@ -20,7 +20,6 @@ public class CustomUserDetails implements UserDetails {
 
     private final User user;
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Convert the user's role to a Spring Security GrantedAuthority

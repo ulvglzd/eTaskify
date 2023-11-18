@@ -26,6 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -54,8 +55,6 @@ public class SecurityConfiguration {
             "/swagger-ui.html"
     };
 
-    @Autowired
-    private final UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public AuthenticationProvider authenticationProvider() {

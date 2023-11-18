@@ -26,7 +26,7 @@ public class SwaggerConfiguration {
         Contact contact = new Contact()
                 .name("Ulvi Guluzada")
                 .email("ulviguluzada@gmail.com")
-                .url("https://github.com/ulvglzd");
+                .url("https://www.linkedin.com/in/ulviguluzada/");
 
 
         Info info = new Info()

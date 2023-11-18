@@ -37,8 +37,6 @@ public class Organization {
     @OneToMany(mappedBy = "organization",cascade = CascadeType.ALL)
     private Set<Task> task;
 
-    //override equals and hashcode
-
 
     @Override
     public boolean equals(Object o) {
