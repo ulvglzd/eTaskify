@@ -2,6 +2,7 @@ package com.etaskify.etaskifybackend.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
@@ -17,6 +18,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Represents the request to create task and update tasks details")
 public class TaskRequest {
     @NotBlank
     private String title;

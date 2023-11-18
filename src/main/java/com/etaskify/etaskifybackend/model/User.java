@@ -16,7 +16,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "Represents a user in the system")
 public class User {
 
     @Id

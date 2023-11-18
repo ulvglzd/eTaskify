@@ -1,5 +1,6 @@
 package com.etaskify.etaskifybackend.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Represents the user details")
 public class UserDTO {
     private Long id;
     private String name;
