@@ -4,9 +4,11 @@ import com.etaskify.etaskifybackend.dto.UserCreateRequest;
 import com.etaskify.etaskifybackend.dto.UserCreateResponse;
 import com.etaskify.etaskifybackend.enums.Role;
 import com.etaskify.etaskifybackend.exception.AlreadyExistsException;
+import com.etaskify.etaskifybackend.exception.EntityNotFoundException;
 import com.etaskify.etaskifybackend.model.User;
 import com.etaskify.etaskifybackend.repository.UserRepository;
 import com.etaskify.etaskifybackend.service.UserService;
+import com.etaskify.etaskifybackend.service.auth.AuthService;
 import com.etaskify.etaskifybackend.utility.PasswordGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +27,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordGenerator passwordGenerator;
     private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
+
     @Override
     public UserCreateResponse addUser(UserCreateRequest userCreateRequest) {
 
-        Map<String, Boolean> exists = new HashMap<>();
-        exists.put("emailExists", userRepository.existsByEmail(userCreateRequest.getEmail()));
-        if (exists.containsValue(true)) {
-            throw new AlreadyExistsException("Signing up failed", exists);
+        if (userRepository.existsByEmail(userCreateRequest.getEmail())) {
+            throw new AlreadyExistsException("User with this email already exists");
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentAdmin = userRepository
-                    .findByEmail(authentication.getName()).orElseThrow();
+        User currentAdmin = authService.getSignedInUser();
 
         User user = new User();
         user.setEmail(userCreateRequest.getEmail());

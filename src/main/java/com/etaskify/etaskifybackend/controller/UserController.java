@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1/admin")
+@RequestMapping("api/v1/users")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class AdminController {
+public class UserController {
 
     private final UserService userService;
 
@@ -27,5 +27,7 @@ public class AdminController {
         UserCreateResponse response = userService.addUser(userCreateRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+
 
 }

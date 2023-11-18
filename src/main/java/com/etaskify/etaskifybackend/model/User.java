@@ -42,7 +42,10 @@ public class User {
     @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
-    @ManyToMany(mappedBy = "assignedUsers")
+    @ManyToMany(mappedBy = "assignedUsers", fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     private Set<Task> tasks;
 
 }

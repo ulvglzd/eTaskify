@@ -3,6 +3,7 @@ package com.etaskify.etaskifybackend.model;
 import com.etaskify.etaskifybackend.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "tasks")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Task {
@@ -29,12 +31,12 @@ public class Task {
     @Column(nullable = false)
     private LocalDateTime deadline;
 
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "organization_id", nullable = false)
+    @JoinColumn(name = "organization_id", referencedColumnName = "id")
     private Organization organization;
 
     @ManyToMany
@@ -44,5 +46,6 @@ public class Task {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> assignedUsers;
+
 
 }
