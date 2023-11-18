@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SignInRequest {
-    @Email
+    @Email(message = "Email should be valid")
     private String email;
     @Size(min = 6, max = 50, message = "The minimum password length must be 6")
     private String password;

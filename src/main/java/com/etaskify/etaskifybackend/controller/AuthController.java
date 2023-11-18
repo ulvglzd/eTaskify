@@ -6,6 +6,7 @@ import com.etaskify.etaskifybackend.dto.authDTO.SignInRequest;
 import com.etaskify.etaskifybackend.dto.authDTO.SignUpRequest;
 import com.etaskify.etaskifybackend.exception.IncorrectCredentialsException;
 import com.etaskify.etaskifybackend.service.auth.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<AuthResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<AuthResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         return ResponseEntity.ok(authService.signUp(signUpRequest));
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<?> signIn(@RequestBody SignInRequest request) {
+    public ResponseEntity<?> signIn(@Valid @RequestBody SignInRequest request) {
         try{
             return ResponseEntity.ok(authService.signIn(request));
         } catch (IncorrectCredentialsException e) {
