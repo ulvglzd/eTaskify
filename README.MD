@@ -24,8 +24,8 @@ eTaskify is a task management application designed to help organizations manage 
 
 Before running eTaskify, ensure you have the following installed:
 - Java JDK 17 or higher
-- Gradle (for building the application)
 - MySQL 
+- Intellij for simplicity
 
 ### Configuration
 
@@ -56,19 +56,14 @@ Before running eTaskify, ensure you have the following installed:
    security:
    secret-key: ${SECRET_KEY}
    ```
-   
-
 
 ### Building the Application
-You can build and run application via IDE using UI or command line.
-To build in command line you need to add Gradle installation directory to the system's PATH environment variable and run the following command in the root directory of the project:
+You can build and run application via IDE using UI or command line. It is recommended to use Intellij IDEA for simplicity.
+You need to have Gradle to run it via command line. 
 
-```bash
-gradle bootRun
-```
-
-### Access the Application
+### Access the Application and Use
 - Once the application is running, you can access it via:
 http://localhost:8086
-- For API documentation and testing, visit: http://localhost:8086/swagger-ui/index.html
+- You can easily access and test the endpoints using swagger UI http://localhost:8086/swagger-ui/index.html
+- You will find description and basic documenation for all endpoints
 
