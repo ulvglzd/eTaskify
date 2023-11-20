@@ -46,7 +46,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) {
         ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
-                .message("Access denied: " + ex.getMessage())
+                .message(ex.getMessage() + ": You are not allowed to perform this action!")
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(NotAllowedException.class)
+    public ResponseEntity<Object> handleNotAllowedException(NotAllowedException ex) {
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
+                .message(ex.getMessage())
                 .statusCode(HttpStatus.FORBIDDEN.value())
                 .timestamp(LocalDateTime.now())
                 .build();

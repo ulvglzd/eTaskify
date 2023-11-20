@@ -1,11 +1,12 @@
 package com.etaskify.etaskifybackend.service.Impl;
 
-import com.etaskify.etaskifybackend.dto.UserRequest;
 import com.etaskify.etaskifybackend.dto.UserCreateResponse;
 import com.etaskify.etaskifybackend.dto.UserDTO;
+import com.etaskify.etaskifybackend.dto.UserRequest;
 import com.etaskify.etaskifybackend.enums.Role;
 import com.etaskify.etaskifybackend.exception.AlreadyExistsException;
 import com.etaskify.etaskifybackend.exception.EntityNotFoundException;
+import com.etaskify.etaskifybackend.exception.NotAllowedException;
 import com.etaskify.etaskifybackend.model.User;
 import com.etaskify.etaskifybackend.repository.UserRepository;
 import com.etaskify.etaskifybackend.service.UserService;
@@ -13,13 +14,11 @@ import com.etaskify.etaskifybackend.service.auth.AuthService;
 import com.etaskify.etaskifybackend.utility.PasswordGenerator;
 import com.etaskify.etaskifybackend.utility.UserMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,7 +109,7 @@ public class UserServiceImpl implements UserService {
         Long SignedInUserOrgId = getCurrentOrganizationId();
         User user = optionalUser.orElseThrow(() -> new EntityNotFoundException("User not found"));
         if (!user.getOrganization().getId().equals(SignedInUserOrgId)) {
-            throw new AccessDeniedException("You are not allowed to access this user");
+            throw new NotAllowedException("You are not allowed to access this user");
         }
         return user;
     }

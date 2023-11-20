@@ -1,15 +1,13 @@
 package com.etaskify.etaskifybackend.controller;
 
-import com.etaskify.etaskifybackend.dto.UserRequest;
 import com.etaskify.etaskifybackend.dto.UserCreateResponse;
 import com.etaskify.etaskifybackend.dto.UserDTO;
+import com.etaskify.etaskifybackend.dto.UserRequest;
 import com.etaskify.etaskifybackend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +25,7 @@ public class UserController {
 
     @Operation(summary = "Creates user", description = "It enable organization admin to create user")
     @PostMapping()
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> addUser(@Valid @RequestBody UserRequest userRequest) {
         UserCreateResponse response = userService.addUser(userRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

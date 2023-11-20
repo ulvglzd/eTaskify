@@ -3,20 +3,14 @@ package com.etaskify.etaskifybackend.service.Impl;
 import com.etaskify.etaskifybackend.dto.OrganizationDTO;
 import com.etaskify.etaskifybackend.dto.OrganizationRequest;
 import com.etaskify.etaskifybackend.exception.EntityNotFoundException;
+import com.etaskify.etaskifybackend.exception.NotAllowedException;
 import com.etaskify.etaskifybackend.model.Organization;
-import com.etaskify.etaskifybackend.model.Task;
-import com.etaskify.etaskifybackend.model.User;
 import com.etaskify.etaskifybackend.repository.OrganizationRepository;
 import com.etaskify.etaskifybackend.service.OrganizationService;
 import com.etaskify.etaskifybackend.service.auth.AuthService;
-import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +32,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     public void updateOrganization(Long id, OrganizationRequest request) {
         Long loggedInAdmin = authService.getSignedInUser().getOrganization().getId();
         if (!loggedInAdmin.equals(id)) {
-            throw new AccessDeniedException("You are not allowed to update this organization");
+            throw new NotAllowedException("You are not allowed to update this organization");
         }
         Organization org = organizationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Organization not found"));

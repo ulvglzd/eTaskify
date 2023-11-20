@@ -4,6 +4,7 @@ import com.etaskify.etaskifybackend.dto.TaskDTO;
 import com.etaskify.etaskifybackend.dto.TaskRequest;
 import com.etaskify.etaskifybackend.enums.TaskStatus;
 import com.etaskify.etaskifybackend.exception.EntityNotFoundException;
+import com.etaskify.etaskifybackend.exception.NotAllowedException;
 import com.etaskify.etaskifybackend.model.Organization;
 import com.etaskify.etaskifybackend.model.Task;
 import com.etaskify.etaskifybackend.model.User;
@@ -11,12 +12,9 @@ import com.etaskify.etaskifybackend.repository.OrganizationRepository;
 import com.etaskify.etaskifybackend.repository.TaskRepository;
 import com.etaskify.etaskifybackend.repository.UserRepository;
 import com.etaskify.etaskifybackend.service.TaskService;
-import com.etaskify.etaskifybackend.service.UserService;
 import com.etaskify.etaskifybackend.service.auth.AuthService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -46,7 +44,7 @@ public class TaskServiceImpl implements TaskService {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("User not found"));
             if (!user.getOrganization().equals(organization)) {
-                throw new AccessDeniedException("You are not allowed to assign this user");
+                throw new NotAllowedException("You are not allowed to assign this user");
             }
             assignedUsers.add(user);
             mailSendingService.sendMail(user.getEmail(), "New task",
@@ -68,7 +66,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDTO getTaskById(Long taskId) throws AccessDeniedException {
+    public TaskDTO getTaskById(Long taskId) throws NotAllowedException {
         return  mapTaskToDto(getByTaskId(taskId));
     }
 
@@ -106,7 +104,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void updateTask(Long taskId, TaskRequest request) throws AccessDeniedException {
+    public void updateTask(Long taskId, TaskRequest request) throws NotAllowedException {
         Task task = getByTaskId(taskId);
         task = Task.builder()
                 .id(taskId)
@@ -120,17 +118,17 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTask(Long taskId) throws AccessDeniedException {
+    public void deleteTask(Long taskId) throws NotAllowedException {
         taskRepository.delete(getByTaskId(taskId));
     }
 
-    private Task getByTaskId(Long taskId) throws AccessDeniedException {
+    private Task getByTaskId(Long taskId) throws NotAllowedException {
         Organization signedInUserOrganization = authService.getSignedInUser().getOrganization();
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException("Task was not found"));
 
         if (!task.getOrganization().equals(signedInUserOrganization)) {
-            throw new AccessDeniedException("You are not allowed to access this task");
+            throw new NotAllowedException("You are not allowed to access this task");
         }
         else
             return task;
@@ -140,7 +138,7 @@ public class TaskServiceImpl implements TaskService {
     private void checkIfOrgMatches(Long organizationId) {
         Long signedInUserOrgId = authService.getSignedInUser().getOrganization().getId();
         if (signedInUserOrgId != organizationId) {
-            throw new AccessDeniedException("You are not allowed to access this organization");
+            throw new NotAllowedException("You are not allowed to access this organization");
         }
     }
 
