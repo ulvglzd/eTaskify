@@ -18,6 +18,9 @@ eTaskify is a task management application designed to help organizations manage 
 - **Task Update**: Admin users can update the details of tasks such as title, description, deadline, and status.
 - **Email Sending**: Users will be notified upon task assignment.
 
+## Tech-stack
+
+
 ## Getting Started
 
 ### Prerequisites
